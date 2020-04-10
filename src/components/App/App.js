@@ -26,6 +26,7 @@ class App extends Component {
   submitNewSong = (event) => {
     event.preventDefault();
     console.log('NEW SONG:', this.state.newSong);
+    this.addSong(this.state.newSong);
   }
 
   changeNewSong = (event, newSongKey) => {
@@ -38,9 +39,38 @@ class App extends Component {
     })
   }
 
+  clickDeleteSong = (event) => {
+    // with jquery:
+    // const songId = $(this).data('id');
+    
+    const songId = event.target.dataset.id;
+    console.log('DELETE CLICKED', songId);
+
+    // call a method that deletes from server
+    this.deleteSong(songId);
+  }
+
   //
   // API SERVER CALLS
   // -------------------
+
+  deleteSong(id) {
+    axios({
+      method: 'DELETE',
+      url: `/songs/${id}`,
+    })
+    .then((response) => {
+      // update state with server data
+      console.log('Server DELETE Response:', response.data);
+      // message says "OK", so what do we do?
+      this.getSongs();
+    })
+    .catch((err) => {
+      // surface error message to user
+      console.log('ERROR:', err);
+      alert('There was an issue deleting your song. Please try again later.');
+    });
+  }
 
   addSong(newSongData) {
     axios({
@@ -59,6 +89,7 @@ class App extends Component {
       // update state with server data
       console.log('Server POST Response:', response.data);
       // message says "OK", so what do we do?
+      this.getSongs();
     })
     .catch((err) => {
       // surface error message to user
@@ -104,6 +135,7 @@ class App extends Component {
           <em>- by, {song.artist}</em>
           <p>Rank: {song.rank}</p>
           <p>{song.published}</p>
+          <button data-id={song.id} onClick={this.clickDeleteSong}>DELETE</button>
         </div>
       )
     });
