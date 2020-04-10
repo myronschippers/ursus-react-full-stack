@@ -13,6 +13,31 @@ class App extends Component {
     this.getSongs();
   }
 
+  addSong(newSongData) {
+    axios({
+      method: 'POST',
+      url: '/songs',
+      data: newSongData
+      // EXPECTED FORMAT:
+      // {
+      //   rank: 0,
+      //   artist: '',
+      //   track: '',
+      //   published: '',
+      // }
+    })
+    .then((response) => {
+      // update state with server data
+      console.log('Server POST Response:', response.data);
+      // message says "OK", so what do we do?
+    })
+    .catch((err) => {
+      // surface error message to user
+      console.log('ERROR:', err);
+      alert('There was an issue saving your song. Please try again later.');
+    });
+  }
+
   getSongs() {
     // $.ajax(
     //   {}
@@ -61,9 +86,12 @@ class App extends Component {
         </header>
 
         <br />
-        <h2>Songs List</h2>
+
         <div>
-          {displayedSongs}
+          <h2>Songs List</h2>
+          <div>
+            {displayedSongs}
+          </div>
         </div>
       </div>
     );
