@@ -4,6 +4,12 @@ import axios from 'axios';
 
 class App extends Component {
   state = {
+    newSong: {
+      track: '',
+      artist: '',
+      published: '',
+      rank: 0,
+    },
     songsList: []
   }
 
@@ -12,6 +18,29 @@ class App extends Component {
     console.log('Component App Did Mount');
     this.getSongs();
   }
+
+  //
+  // EVENT HANDLERS
+  // -------------------
+
+  submitNewSong = (event) => {
+    event.preventDefault();
+    console.log('NEW SONG:', this.state.newSong);
+  }
+
+  changeNewSong = (event, newSongKey) => {
+    // any update to state uses this.setState();
+    this.setState({
+      newSong: {
+        ...this.state.newSong,
+        [newSongKey]: event.target.value,
+      }
+    })
+  }
+
+  //
+  // API SERVER CALLS
+  // -------------------
 
   addSong(newSongData) {
     axios({
@@ -86,6 +115,46 @@ class App extends Component {
         </header>
 
         <br />
+
+        <form onSubmit={this.submitNewSong}>
+          <h2>Add New Song</h2>
+          <label>
+            <span>Track:</span>
+            <input
+              type="text"
+              placeholder="Enter song track name"
+              required
+              onChange={(event) => this.changeNewSong(event, 'track')}
+            />
+          </label>
+          <label>
+            <span>Artist:</span>
+            <input
+              type="text"
+              placeholder="Enter artist's name"
+              required
+              onChange={(event) => this.changeNewSong(event, 'artist')}
+            />
+          </label>
+          <label>
+            <span>Date Published:</span>
+            <input
+              type="text"
+              placeholder="01/01/1980"
+              onChange={(event) => this.changeNewSong(event, 'published')}
+            />
+          </label>
+          <label>
+            <span>Rank:</span>
+            <input
+              type="text"
+              placeholder="Enter song's rank"
+              onChange={(event) => this.changeNewSong(event, 'rank')}
+            />
+          </label>
+
+          <button>Save Song</button>
+        </form>
 
         <div>
           <h2>Songs List</h2>
