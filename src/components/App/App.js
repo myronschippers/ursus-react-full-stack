@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
+import Header from '../Header/Header';
 
 class App extends Component {
   state = {
@@ -42,7 +43,7 @@ class App extends Component {
   clickDeleteSong = (event) => {
     // with jquery:
     // const songId = $(this).data('id');
-    
+
     const songId = event.target.dataset.id;
     console.log('DELETE CLICKED', songId);
 
@@ -142,14 +143,12 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Songs!</h1>
-        </header>
+        <Header />
 
         <br />
 
         <form onSubmit={this.submitNewSong}>
-          <h2>Add New Song</h2>
+          <h2 className="App-header">Add New Song</h2>
           <label>
             <span>Track:</span>
             <input
